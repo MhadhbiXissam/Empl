@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
+		<title>Main Page</title>
+	</head>
+	<style type="text/css">
+		*{
+		box-sizing: border-box;
+		}
+		.fixed-bottom{
+		position: fixed;
+		left: 0px;
+		top:0%;
+		width: 100%;
+		height: 50px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		z-index: 10;
+		transition: box-shadow 250ms ease 0s;
+		color: rgb(241, 241, 241);
+		padding: 6px 16px;
+		background: ghostwhite none repeat scroll 0% 0% / cover;
+		box-sizing: border-box;
+		border-top: 1px solid rgba(0, 0, 0, 0.2);
+		color: black;
+		padding-left: 25px;
+		box-shadow: -5px 9px 19px -7px rgba(0,0,0,0.75);
+		-webkit-box-shadow: -5px 9px 19px -7px rgba(0,0,0,0.75);
+		-moz-box-shadow: -5px 9px 19px -7px rgba(0,0,0,0.75);
+		}
+		.big-checkbox{
+		-ms-transform: scale(1.3); /* IE */
+		-moz-transform: scale(1.3); /* FF */
+		-webkit-transform: scale(1.3); /* Safari and Chrome */
+		-o-transform: scale(1.3); /* Opera */
+		transform: scale(1.3);
+		}
+	</style>
+	<body>
+		<div class="fixed-bottom bg-dark ">
+			<div class="d-flex flex-row align-items-center">
+				<div class="p-2 btn-primary" style="font-weight: 400;font-size: 1rem;border-radius: .25rem;line-height: 1.5;">
+					<div class="form-check f" >
+						<label class="form-check-label " style="font-weight: 400;font-size: 1rem;border-radius: .25rem;line-height: 1.5;">
+						&nbsp;&nbsp;<input type="checkbox" class="form-check-input  big-checkbox" id="Menu-checkbox" unchecked >&nbsp;&nbsp;Select All&nbsp;&nbsp;
+						</label>
+					</div>
+				</div>
+				<div class="p-2"><button type="button" class="btn btn-danger" id="Delete selected" disabled>Delete selected</button></div>
+				<div class="p-2"><button type="button" class="btn btn-success" id="Add new Employee" >Add new Employee</button></div>
+			</div>
+		</div>
+		<style type="text/css">
+			body{
+			background-color: #454d55 ;
+			}
+			.big-checkbox{
+			-ms-transform: scale(1.5); /* IE */
+			-moz-transform: scale(1.5); /* FF */
+			-webkit-transform: scale(1.5); /* Safari and Chrome */
+			-o-transform: scale(1.5); /* Opera */
+			transform: scale(1.5);
+			}
+			.check-box{
+			border: 3px solid whitesmoke;
+			-ms-transform: scale(1.2); /* IE */
+			-moz-transform: scale(1.2); /* FF */
+			-webkit-transform: scale(1.2); /* Safari and Chrome */
+			-o-transform: scale(1.2); /* Opera */
+			transform: scale(1.2);  
+			color:orange;
+			}
+			input[type="checkbox"].check-box:checked + i{
+			border-color: red;
+			background-color:red;
+			}
+			.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+			color: #8cb4ff;
+			}
+			tr:hover {
+			border-left: solid 4px #8cb4ff;
+			border-right: solid 4px #8cb4ff;
+			}
+			.fa-edit:hover{
+			opacity: 0.6;
+			}
+		</style>
+		<style type="text/css">
+			.modal {
+			display: none; /* Hidden by default */
+			position: fixed; /* Stay in place */
+			z-index: 1; /* Sit on top */
+			padding-top: 100px; /* Location of the box */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			overflow: auto; /* Enable scroll if needed */
+			background-color: rgb(0,0,0); /* Fallback color */
+			background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+			}
+			.mdialog{
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 600px;
+			border-radius: 3px;
+			}
+		</style>
+		<section style="padding: 25px; padding-top: 60px;" >
+			<table class="table table-dark table-striped table-hover" style="border: 1px solid #454d55 ; border-radius: 16px;">
+				<thead>
+					<tr>
+						<th>&nbsp;&nbsp;</th>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Email</th>
+						<th>PhoneNumber</th>
+						<th>HiredOn</th>
+						<th>Manager</th>
+						<th>Team</th>
+						<th>Birthday</th>
+						<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id = "list-empls">
+					<script type="text/javascript" defer>
+						$.getJSON("http://127.0.0.1:8000/api/all", function(data) {
+                            var hederTable, serverData, teams_string, tr;
+                            serverData = data ; 
+
+                            hederTable = ["Name", "Position", "Email", "PhoneNumber", "HiredOn", "Manager", "Team", "Birthday"];
+                            for (var i, _pj_c = 0, _pj_a = serverData, _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
+                                    i = _pj_a[_pj_c];
+                                    console.log(i)
+                                    tr = document.createElement("tr");
+                                    tr.setAttribute("data", JSON.stringify(i));
+                                    tr.innerHTML = '<td>&nbsp;&nbsp;<input type="checkbox"  id="' + i.id + '"" class="check-box"></td>';
+                                    tr.innerHTML += ((" <td> " + i.Name) + "</td>");
+                                    tr.innerHTML += ((" <td> " + i.Position) + "</td>");
+                                    tr.innerHTML += ((" <td> " + i.Email) + "</td>");
+                                    tr.innerHTML += ((" <td> " + i.PhoneNumber) + "</td>");
+                                    tr.innerHTML += ((" <td> " + i.HiredOn.year + " / " + i.HiredOn.month + " / " + i.HiredOn.day ) + "</td>");
+                                    tr.innerHTML += ((" <td> " + (i.IsManager ? "Yes" : "No")) + "</td>");
+                                    teams_string = [];
+                                    if (i.Team.Dev_team) {
+                                        teams_string.push("Dev team");
+                                    }
+                                    if (i.Team.Dev_team) {
+                                        teams_string.push("Design team");
+                                    }
+                                    if (i.Team.DevOps_team) {
+                                        teams_string.push("DevOps team");
+                                    }
+
+                                    tr.innerHTML += ((" <td> " + teams_string.join(" - ")) + "</td>");
+                                    tr.innerHTML += ((" <td> " + i.Birthday.year + " / " + i.Birthday.month + " / " + i.Birthday.day ) + "</td>");
+                                    tr.innerHTML += "<td><i class=\"fa fa-edit\"  style=\"font-size:24px ; color:greenyellow; padding: 4px; border-radius:3px ; vertical-align: center ; cursor:pointer;\" >&nbsp;&nbsp;</i></td>";
+                                    tr.setAttribute("id" , "itm" + i.id )
+                                    document.getElementById("list-empls").appendChild(tr);
+                            }
+						});
+
+
+
+					</script>
+				</tbody>
+			</table>
+			<style type="text/css">
+				.modal {display: none; /* Hidden by default */ position: fixed; /* Stay in place */ z-index: 20; /* Sit on top */ padding-top: 100px; /* Location of the box */ left: 0; top: 0; width: 100%; /* Full width */ height: 100%; /* Full height */ overflow: auto; /* Enable scroll if needed */ background-color: rgb(0,0,0); /* Fallback color */ background-color: rgba(0,0,0,0.4); /* Black w/ opacity */ } 
+				.mdialog{background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 600px; border-radius: 16px; } 
+			</style>
+			<div class="modal  " id = "edit-dialog">
+				<div class="mdialog" >
+					<form style="display:flex;justify-content: space-between; " >
+						<div>
+							<div class="form-group"> <label for="exampleInputEmail1">Name</label> <input type="text" class="form-control" id="empl-Name"  placeholder="Enter Name" > </div>
+							<div class="form-group"> <label for="exampleInputEmail1">Position</label> <input type="text" class="form-control"  id="empl-Position"  placeholder="Enter email" > </div>
+							<div class="form-group"> <label for="exampleInputPassword1">Email</label> <input type="text" class="form-control"  id="empl-Email"  placeholder="Enter Email" > </div>
+							<div class="form-group"> <label for="exampleInputPassword1">Phone-Number</label> <input type="text" class="form-control"  id="empl-PhoneNumber"  placeholder="Enter PhoneNumber" > </div>
+						</div>
+						<div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+						<!--modal--> 
+						<div>
+							<div class="form-group"> <label for="exampleInputPassword1">Birthday (YYYY-MM-DD)</label> <input type="text" class="form-control"  id="empl-Birthday"  placeholder="Enter Birthday" > </div>
+							<div class="form-group"> <label for="exampleInputPassword1">Hired-On  (YYYY-MM-DD)</label> <input type="text" class="form-control"  id="empl-Hired-On"  placeholder="Enter Hired-On" > </div>
+							<div class="form-group row">
+								<div class="col-sm-5">Manager</div>
+								<div class="col-sm-7">
+									<div class="form-check"> <input class="form-check-input" type="checkbox" id="empl-Manager"> <label class="form-check-label" for="gridCheck1"> Yes </label> </div>
+								</div>
+							</div>
+							<fieldset class="form-group" id="fieldset">
+								<div class="row">
+									<legend class="col-form-label col-sm-5 pt-0">Managed Team(s) : </legend>
+									<div class="col-sm-7">
+										<div class="form-check"> <input class="form-check-input" type="checkbox" name="gridRadios" id="Dev team"> <label class="form-check-label" for="gridRadios1"> Dev team </label> </div>
+										<div class="form-check"> <input class="form-check-input" type="checkbox" name="gridRadios" id="Design team" > <label class="form-check-label" for="gridRadios2"> Design team </label> </div>
+										<div class="form-check "> <input class="form-check-input" type="checkbox" name="gridRadios" id="DevOps team" > <label class="form-check-label" for="gridRadios3"> DevOps team </label> </div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</form>
+					<div class="row">
+						<div class="col-sm-6 d-flex justify-content-center " ><button type="submit" class="btn btn-primary btn-block " id="submit-btn" >Submit</button></div>
+						<div class="col-sm-6 d-flex justify-content-center "><button type="submit" class="btn btn-success btn-block" id="close-btn">Cancel</button></div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				//---------------------
+				document.getElementById('submit-btn').onclick =  function (x){
+					console.log({Name : document.getElementById('empl-Name').value }) ; 
+								document.getElementById('edit-dialog').style.display = "none" ; 
+							fetch('https://httpbin.org/post', {
+								method: 'POST',
+								headers: {
+									'Accept': 'application/json, text/plain, */*',
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({
+									Name : document.getElementById('empl-Name').value ,
+									Position  : document.getElementById('empl-Position').value  , 
+									Email :document.getElementById('empl-Email').value ,
+									PhoneNumber : document.getElementById('empl-PhoneNumber').value , 
+									Birthday : document.getElementById('empl-Birthday').value , 
+									HiredOn : document.getElementById('empl-Hired-On').value  , 
+									IsManager : document.getElementById('empl-Manager').checked  , 
+									Team : [document.getElementById('Dev team').checked ? 1 : 0  , document.getElementById('Design team').checked ? 1 : 0 , document.getElementById('DevOps team') ? 1 : 0  ]
+								})
+							}).then(res => res.json())
+								.then(res => location.reload());
+							}
+				
+				//---------------------
+				document.getElementById('close-btn').onclick =  function (x){
+								document.getElementById('edit-dialog').style.display = "none" ; 
+				
+							}
+				//---------------------
+				document.getElementById('empl-Manager').onchange =  function (x){
+								document.getElementById('fieldset').style.visibility = (x.currentTarget.checked == true ) ? "visible":"hidden";
+							}
+				//---------------------
+				
+			</script>
+
+
+			<script type="text/javascript">
+				document.querySelectorAll('i.fa.fa-edit').forEach((e) => {
+					e.addEventListener("click",     function(evt) {
+						var data_itm = JSON.parse(evt.currentTarget.parentNode.parentNode.getAttribute('data')); 
+						document.getElementById('empl-Name').value  = data_itm.Name  ; 
+						document.getElementById('empl-Position').value  = data_itm.Position  ; 
+						document.getElementById('empl-Email').value  = data_itm.Email  ; 
+						document.getElementById('empl-PhoneNumber').value  = data_itm.PhoneNumber  ; 
+						document.getElementById('empl-Birthday').value  = data_itm.Birthday.split(" ")[0]  ; 
+						document.getElementById('empl-Hired-On').value  = data_itm.HiredOn.split(" ")[0]  ; 
+						document.getElementById('empl-Manager').checked  = data_itm.IsManager ;   
+						//visibility: visible;
+						if(data_itm.IsManager == true){
+							document.getElementById('fieldset').style.visibility = "visible" ; 
+							document.getElementById('Dev team').checked =  data_itm.Team.split("-").map((x) => { return parseInt(x)}).includes(1) ; 
+							document.getElementById('Design team').checked =  data_itm.Team.split("-").map((x) => { return parseInt(x)}).includes(2) ;
+							document.getElementById('DevOps team').checked = data_itm.Team.split("-").map((x) => { return parseInt(x)}).includes(3) ;
+				
+						}else{
+							document.getElementById('fieldset').style.visibility = "hidden" ; 
+							document.getElementById('Dev team').checked =  false ; 
+							document.getElementById('Design team').checked =  false ; 
+							document.getElementById('DevOps team').checked =  false ;   
+						}
+						document.getElementById('empl-Name').value  = data_itm.Name   ; 
+						var modal = document.getElementById("edit-dialog");
+						modal.style.display = "block";
+					})
+				})
+			</script>
+			<script type="text/javascript">
+				document.getElementById('Add new Employee').onclick = function(){
+					location.href = "http://127.0.0.1:8000/add" ; 
+				}
+			</script>
+			<script type="text/javascript">
+				var list_checkboxes = document.querySelectorAll('input[class="check-box"]'); 
+				 for (var i = 0, len = list_checkboxes.length; i < len; i++){
+					 list_checkboxes[i].addEventListener('change', (event) => {
+						 document.getElementById("Delete selected").disabled = !(Array.from(document.querySelectorAll('input[class="check-box"]')).some( (e) => { return e.checked}))  ; 
+						 if (event.target.checked == true){event.target.parentNode.parentNode.style.color = "salmon" ; }
+						 else{
+							event.target.parentNode.parentNode.style.color = "#fff" ; 
+						 }
+						 
+					 })
+				
+				 }
+			</script>
+		</section>
+	</body>
+			<script type="text/javascript">
+				var checkbox = document.getElementById("Menu-checkbox")
+							
+				checkbox.addEventListener('change', (event) => {
+								var checkboxes = document.querySelectorAll('input[class="check-box"]')
+								if (event.currentTarget.checked) {
+									document.querySelectorAll('input[class="check-box"]').forEach((e) => { e.parentNode.parentNode.style.color = "salmon" ; })
+									for (var i = 0, len = checkboxes.length; i < len; i++) {checkboxes[i].checked = true ; }
+									document.getElementById("Delete selected").disabled = false ; 
+								} else {
+									document.querySelectorAll('input[class="check-box"]').forEach((e) => { e.parentNode.parentNode.style.color = "#fff" ; }); 
+									for (var i = 0, len = checkboxes.length; i < len; i++) {checkboxes[i].checked = false ; }
+									document.getElementById("Delete selected").disabled = true ; 
+								}
+							})
+			</script>
+
+			<!--<script type="text/javascript">
+					function getcheckedlist(){
+					    var parms = [] ; 
+					    if (document.getElementById("Menu-checkbox").checked){
+					        parms = "all" ; 
+					    }
+					    else {
+					        listcheked = document.getElementById("list-empls").querySelectorAll("tr[id]") ;
+					        listids = []
+							
+					        for (var i = 0 ; i < listcheked.length ; i++){
+					            var id_itm = listcheked[i].getAttribute("id").replace("itm","") ; 
+					            if (id_itm != null){
+					                parms.push(id_itm) ; 
+					            }
+
+					        }
+					    }
+
+					    return parms ; 
+					}
+					document.getElementById("Delete selected").onclick = function (){
+					    var parms = [] ; 
+					    if (document.getElementById("Menu-checkbox").checked){
+					        parms = "all" ; 
+					    }
+					    else {
+					        listcheked = document.getElementById("list-empls").querySelectorAll("tr[id]") ;
+					        listids = []
+							
+					        for (var i = 0 ; i < listcheked.length ; i++){
+					            var id_itm = listcheked[i].getAttribute("id").replace("itm","") ; 
+					            if (id_itm != null){
+					                parms.push(id_itm) ; 
+					            }
+
+					        }
+					    }
+
+					fetch('http://127.0.0.1:8000/api/delete', {
+					  method: 'POST',
+					  headers: {
+					    'Accept': 'application/json, text/plain, */*',
+					    'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify(parms)
+					}).then( location.reload()).then( alert("hhhhhhh"))
+					}
+			</script>-->
+</html>
+
