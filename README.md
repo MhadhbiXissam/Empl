@@ -61,4 +61,5 @@ Employee Mangement App
 	* to test the api of the project use the curl commands provided here in README.md .
 	
 # Notes : 
-	* the connection of functionnalities betewen fronyt-end and backend they are not all implemented , but the api functionnalities are are all implemented . 
+	* the connection of functionnalities betewen fronyt-end and backend they are not all implemented ,  
+	but the api functionnalities are are all implemented . 
