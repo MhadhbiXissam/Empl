@@ -3,9 +3,9 @@ Employee Mangement App
 
 
 
-#Getting all data   : GET http://127.0.0.1:8000/api/all"  
+# Getting all data   : GET http://127.0.0.1:8000/api/all"  
 
-#update row data  : POST http://127.0.0.1:8000/api/update , data = {full employee data }  
+# update row data  : POST http://127.0.0.1:8000/api/update , data = {full employee data }  
 ## example with requests :  
 	r = requests.post("http://127.0.0.1:8000/api/update" , data ={
     "id": 12,
@@ -35,7 +35,7 @@ Employee Mangement App
 
 
 
-#Delete partial employees list :  POST http://127.0.0.1:8000/api/delete , data = "all" | list of ids  : 
+# Delete partial employees list :  POST http://127.0.0.1:8000/api/delete , data = "all" | list of ids  : 
 ## example with requests :  
 	r = requests.post("http://127.0.0.1:8000/api/delete" , data = {"ids" : [10,2,3]})
 
@@ -53,4 +53,12 @@ Employee Mangement App
 ## example with curl : 
 	curl -X POST -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Connection: keep-alive' -H 'Content-Length: 457' -H 'Content-Type: application/x-www-form-urlencoded' -H 'User-Agent: python-requests/2.25.1' -d data=%7B%22Name%22%3A+%22xxxxxxxxxxx+%22%2C+%22Birthday%22%3A+%7B%22year%22%3A+2015%2C+%22month%22%3A+4%2C+%22day%22%3A+18%7D%2C+%22HiredOn%22%3A+%7B%22year%22%3A+2015%2C+%22month%22%3A+4%2C+%22day%22%3A+18%7D%2C+%22Position%22%3A+%22uuuuu%22%2C+%22Email%22%3A+%22vvvvv%40gmail.gmail%22%2C+%22PhoneNumber%22%3A+%22lllll%22%2C+%22IsManager%22%3A+true%2C+%22Team%22%3A+%7B%22Dev_team%22%3A+true%2C+%22Design_team%22%3A+true%2C+%22DevOps_team%22%3A+false%7D%7D http://127.0.0.1:8000/api/add
 
-
+# How to run the project :  
+	* create virtual env from terminal and activate it then install the requirements .
+	* cd to where the manage.py where the manage.py exist :
+	* type in terminal the command line : python3 manage.py runserver 
+	* open the browser on : http://127.0.0.1:8000/  
+	* to test the api of the project use the curl commands provided here in README.md .
+	
+# Notes : 
+	* the connection of functionnalities betewen fronyt-end and backend they are not all implemented , but the api functionnalities are are all implemented . 
